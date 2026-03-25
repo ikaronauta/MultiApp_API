@@ -1,0 +1,23 @@
+# Build
+bin/
+obj/
+
+# User files
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# Configuración sensible
+appsettings.Development.json
+
+# Archivos HTTP (opcional)
+*.http
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

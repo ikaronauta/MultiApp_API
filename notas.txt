@@ -1,0 +1,4 @@
+dotnet new webapi --use-controllers -o MultiApp_API
+cd MultiApp_API
+dotnet add package Microsoft.EntityFrameworkCore.InMemory
+code -r .
