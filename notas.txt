@@ -43,3 +43,6 @@ var hasher = new PasswordHasher<object>();
 string hash = hasher.HashPassword(null, "abc123");
 
 Console.WriteLine(hash);
+
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add package System.IdentityModel.Tokens.Jwt

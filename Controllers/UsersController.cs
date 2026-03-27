@@ -3,6 +3,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiApp_API.Data;
 using MultiApp_API.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace MultiApp_API.Controllers;
 
@@ -17,9 +19,11 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
+    [Authorize]
     [HttpGet]
-    public IEnumerable<User> Get()
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
-        return _context.Users.ToList();
+        var users = await _context.Users.ToListAsync();
+        return Ok(users);
     }
 }
