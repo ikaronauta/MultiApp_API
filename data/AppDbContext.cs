@@ -1,3 +1,5 @@
+// data/AppDbContext.cs
+
 using Microsoft.EntityFrameworkCore;
 using MultiApp_API.Models;
 
@@ -10,19 +12,25 @@ namespace MultiApp_API.Data
         {
         }
 
-        public DbSet<Users> Users { get; set; }
+        public DbSet<User> Users { get; set; } // plural para DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Users>()
-                .Property(u => u.DocumentType)
-                .HasConversion<string>();
+            modelBuilder.Entity<User>(entity =>
+            {
+                // Nombre de la tabla
+                entity.ToTable("Users");
 
-            modelBuilder.Entity<Users>()
-                .ToTable(t => t.HasCheckConstraint(
+                // Convertir enum a string
+                entity.Property(u => u.DocumentType)
+                      .HasConversion<string>();
+
+                // Restricción de valores permitidos
+                entity.ToTable(t => t.HasCheckConstraint(
                     "CK_Users_DocumentType",
                     "[DocumentType] IN ('CC', 'NIT', 'Passport')"
                 ));
+            });
         }
     }
 }

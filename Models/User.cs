@@ -1,4 +1,4 @@
-// Models/Users.cs
+// Models/User.cs
 
 namespace MultiApp_API.Models;
 
@@ -9,7 +9,7 @@ public enum DocumentType
     Passport
 }
 
-public class Users 
+public class User 
 {
     public int Id { get; set; }
 

@@ -12,7 +12,7 @@ using MultiApp_API.Data;
 namespace MultiApp_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260327143256_InitialCreate")]
+    [Migration("20260327150513_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace MultiApp_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MultiApp_API.Models.Users", b =>
+            modelBuilder.Entity("MultiApp_API.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace MultiApp_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", t =>
+                    b.ToTable("Users", null, t =>
                         {
                             t.HasCheckConstraint("CK_Users_DocumentType", "[DocumentType] IN ('CC', 'NIT', 'Passport')");
                         });

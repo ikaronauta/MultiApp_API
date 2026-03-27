@@ -49,7 +49,6 @@ namespace MultiApp_API.Migrations
                 columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash" },
                 values: new object[] { "CC", "32156505", "luis.gomez@example.com", "Luis", "Gomez", new DateOnly(1985, 12, 1), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==" }
             );
-
         }
 
         /// <inheritdoc />

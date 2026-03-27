@@ -18,7 +18,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Users> Get()
+    public IEnumerable<User> Get()
     {
         return _context.Users.ToList();
     }
