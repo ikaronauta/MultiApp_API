@@ -1,14 +1,19 @@
 
 ```
 MultiApp_API
-├─ appsettings.Development.json
 ├─ appsettings.json
 ├─ Controllers
 │  └─ WeatherForecastController.cs
+├─ data
+│  └─ AppDbContext.cs
+├─ Migrations
+│  ├─ 20260326135654_InitialCreate.cs
+│  ├─ 20260326135654_InitialCreate.Designer.cs
+│  └─ AppDbContextModelSnapshot.cs
 ├─ Models
 │  └─ WeatherForecast.cs
 ├─ MultiApp_API.csproj
-├─ MultiApp_API.http
+├─ notas.txt
 ├─ Program.cs
 ├─ Properties
 │  └─ launchSettings.json

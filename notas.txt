@@ -1,4 +1,58 @@
+
+
 dotnet new webapi --use-controllers -o MultiApp_API
 cd MultiApp_API
-dotnet add package Microsoft.EntityFrameworkCore.InMemory
 code -r .
+
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+
+dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+BORRAR migración actual
+dotnet ef migrations remove
+
+// Insertar datos iniciales
+migrationBuilder.InsertData(
+    table: "Users",
+    columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash" },
+    values: new object[] { "CC", "16076940", "julian.ortiz@example.com", "Julian", "Ortiz", new DateOnly(1983, 9, 20), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==" }
+);
+
+migrationBuilder.InsertData(
+    table: "Users",
+    columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash" },
+    values: new object[] { "CC", "30287241", "maria.perez@example.com", "Maria", "Perez", new DateOnly(1992, 8, 15), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==" }
+);
+
+migrationBuilder.InsertData(
+    table: "Users",
+    columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash" },
+    values: new object[] { "CC", "32156505", "luis.gomez@example.com", "Luis", "Gomez", new DateOnly(1985, 12, 1), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==" }
+);
+
+using Microsoft.AspNetCore.Identity;
+using MultiApp_API.Models;
+
+// Crear el hasher
+var hasher = new PasswordHasher<Users>();
+
+var user = new Users
+{
+    DocumentType = DocumentType.CC,
+    DocumentNumber = "000000",
+    Email = "dummy@example.com",
+    FirstName = "Dummy",
+    LastName = "User",
+    BirthDate = DateOnly.MinValue,
+    PasswordHash = "" // puede quedar vacío por ahora
+};
+
+// Hashear la contraseña
+string hash = hasher.HashPassword(user, "abc123");
+
+// Imprimir el hash
+Console.WriteLine(hash);
