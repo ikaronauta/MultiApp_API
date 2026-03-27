@@ -6,8 +6,10 @@ obj/
 *.user
 *.suo
 
-# VS Code
+
+# VS + VS Code
 .vscode/
+.vs/
 
 # Configuración sensible
 appsettings.Development.json
