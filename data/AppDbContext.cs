@@ -25,10 +25,18 @@ namespace MultiApp_API.Data
                 entity.Property(u => u.DocumentType)
                       .HasConversion<string>();
 
+                entity.Property(u => u.Status)
+                      .HasConversion<string>();
+
                 // Restricción de valores permitidos
                 entity.ToTable(t => t.HasCheckConstraint(
                     "CK_Users_DocumentType",
                     "[DocumentType] IN ('CC', 'NIT', 'Passport')"
+                ));
+
+                entity.ToTable(t => t.HasCheckConstraint(
+                    "CK_Users_Status",
+                    "[Status] IN ('Activo', 'Inactivo', 'Bloqueado')"
                 ));
             });
         }

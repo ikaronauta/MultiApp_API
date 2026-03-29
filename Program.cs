@@ -49,6 +49,13 @@ if (app.Environment.IsDevelopment())
     // app.MapOpenApi();
 }
 
+app.MapGet("/", () => Results.Ok(new
+{
+    status = "OK",
+    message = "MultiApp API funcionando correctamente",
+    timestamp = DateTime.UtcNow
+}));
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

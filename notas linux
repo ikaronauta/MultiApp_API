@@ -1,0 +1,10 @@
+sqlcmd -S localhost -U sa -P 'Ikaro@742698521*' -C
+
+dotnet tool install --global dotnet-ef
+
+export PATH="$PATH:$HOME/.dotnet/tools"
+
+echo 'export PATH="$PATH:$HOME/.dotnet/tools"' >> ~/.bashrc
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet/tools:$HOME/.dotnet' >> ~/.bashrc
+source ~/.bashrc

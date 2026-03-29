@@ -9,6 +9,13 @@ public enum DocumentType
     Passport
 }
 
+public enum UserStatus
+{
+    Activo,
+    Inactivo,
+    Bloqueado
+}
+
 public class User 
 {
     public int Id { get; set; }
@@ -26,4 +33,6 @@ public class User
     public DateOnly BirthDate { get; set; }
 
     public required string PasswordHash { get; set; }
+
+    public UserStatus Status { get; set; } = UserStatus.Activo;
 }
