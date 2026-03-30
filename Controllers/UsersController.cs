@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiApp_API.Data;
 using MultiApp_API.Models;
+using MultiApp_API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +48,7 @@ public class UsersController : ControllerBase
                     Error = null
                 };
 
-        return Ok(response);
+            return Ok(response);
         }
         catch (Exception ex)
         {

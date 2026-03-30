@@ -16,9 +16,9 @@ public class User
 
     public required string LastName { get; set; }
 
-    public required  DateOnly BirthDate { get; set; }
+    public required DateOnly BirthDate { get; set; }
 
     public required string PasswordHash { get; set; }
 
-    public  UserStatus Status { get; set; } = UserStatus.Activo;
+    public UserStatus Status { get; set; } = UserStatus.Activo;
 }

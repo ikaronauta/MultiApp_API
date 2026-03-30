@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using MultiApp_API.Data;
 using MultiApp_API.Models;
+using MultiApp_API.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
-
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
@@ -35,61 +35,93 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        // Buscar el usuario por email
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email);
-
-        if (user == null)
-            return Unauthorized("Usuario o contraseña incorrectos");
-
-        // Verificar contraseña
-        var hasher = new PasswordHasher<User>();
-        var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
-
-        if (result == PasswordVerificationResult.Failed)
-            return Unauthorized("Usuario o contraseña incorrectos");
-
-        // Lógica JWT
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var keyString = _config["Jwt:Key"];
-
-        if (string.IsNullOrEmpty(keyString))
-            throw new Exception("JWT Key no está configurada");
-
-        var key = Encoding.UTF8.GetBytes(keyString);
-
-        var timeExpireString = _config["Jwt:ExpiresInMinutes"];
-
-        if (string.IsNullOrEmpty(timeExpireString))
-            throw new Exception("Expires no está configurada");
-
-        int timeExpire = int.Parse(timeExpireString);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
+        try
         {
-            Subject = new ClaimsIdentity(new[]
+            var response = new ApiResponse<List<UserLoginDto>>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
-            }),
-            Expires = DateTime.UtcNow.AddMinutes(timeExpire),
-            Issuer = _config["Jwt:Issuer"],
-            Audience = _config["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
+                Status = string.Empty,
+                Data = new List<UserLoginDto>(),
+                Message = string.Empty,
+                Error = null
+            };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        var tokenString = tokenHandler.WriteToken(token);
+            // Buscar el usuario por email
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == request.Email);
 
-        return Ok(new
+            if (user == null){
+                response.Message = "Usuario o contraseña incorrectos";
+                return Unauthorized(response);
+            }
+                
+            // Verificar contraseña
+            var hasher = new PasswordHasher<User>();
+            var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+            if (result == PasswordVerificationResult.Failed) {
+                response.Message = "Usuario o contraseña incorrectos";
+                return Unauthorized(response);
+            }
+                
+            // Lógica JWT
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var keyString = _config["Jwt:Key"];
+
+            if (string.IsNullOrEmpty(keyString))
+                throw new Exception("JWT Key no está configurada");
+
+            var key = Encoding.UTF8.GetBytes(keyString);
+
+            var timeExpireString = _config["Jwt:ExpiresInMinutes"];
+
+            if (string.IsNullOrEmpty(timeExpireString))
+                throw new Exception("Expires no está configurada");
+
+            int timeExpire = int.Parse(timeExpireString);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(timeExpire),
+                Issuer = _config["Jwt:Issuer"],
+                Audience = _config["Jwt:Audience"],
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            response.Status = "OK";
+            response.Data.Add(new UserLoginDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Token = tokenString
+            });
+            response.Message = "Inicio de sesión exitoso";
+            response.Error = null;
+
+            return Ok(response);
+        }
+        catch (Exception ex)
         {
-            user.Id,
-            user.FirstName,
-            user.LastName,
-            user.Email,
-            Token = tokenString
-        });
+            var errorResponse = new ApiResponse<List<UserLoginDto>>
+                {
+                    Status = "FAIL",
+                    Data = new List<UserLoginDto>(),
+                    Message = "No se pudo iniciar sesión",
+                    Error = ex.Message
+                };
+            
+            return BadRequest(errorResponse);
+        }
     }
 }
