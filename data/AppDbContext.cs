@@ -13,6 +13,7 @@ namespace MultiApp_API.Data
         }
 
         public DbSet<User> Users { get; set; } // plural para DbSet
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,11 @@ namespace MultiApp_API.Data
                     "CK_Users_Status",
                     "[Status] IN ('Activo', 'Inactivo', 'Bloqueado')"
                 ));
+
+                entity.HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

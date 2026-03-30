@@ -1,8 +1,8 @@
 // Models/DTOs/UserDto.cs
 
-namespace MultiApp_API.Models.DTOs
-{
-    public class UserDto
+namespace MultiApp_API.Models.DTOs;
+
+public class UserDto
     {
         public int Id { get; set; }
 
@@ -20,4 +20,3 @@ namespace MultiApp_API.Models.DTOs
 
         public UserStatus Status { get; set; } = UserStatus.Activo;
     }
-}

@@ -21,4 +21,8 @@ public class User
     public required string PasswordHash { get; set; }
 
     public UserStatus Status { get; set; } = UserStatus.Activo;
+
+    public int RoleId { get; set; }
+
+    public Role Role { get; set; } = null!;
 }
