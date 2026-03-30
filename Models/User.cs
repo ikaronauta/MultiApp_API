@@ -2,20 +2,6 @@
 
 namespace MultiApp_API.Models;
 
-public enum DocumentType
-{
-    CC,
-    NIT,
-    Passport
-}
-
-public enum UserStatus
-{
-    Activo,
-    Inactivo,
-    Bloqueado
-}
-
 public class User 
 {
     public int Id { get; set; }
@@ -30,9 +16,9 @@ public class User
 
     public required string LastName { get; set; }
 
-    public DateOnly BirthDate { get; set; }
+    public required  DateOnly BirthDate { get; set; }
 
     public required string PasswordHash { get; set; }
 
-    public UserStatus Status { get; set; } = UserStatus.Activo;
+    public  UserStatus Status { get; set; } = UserStatus.Activo;
 }

@@ -21,9 +21,45 @@ public class UsersController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<ApiResponse<List<UserDto>>>> GetUsers()
     {
-        var users = await _context.Users.ToListAsync();
-        return Ok(users);
+        try
+        {
+            var users = await _context.Users
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    DocumentType = u.DocumentType,
+                    DocumentNumber = u.DocumentNumber,
+                    Email = u.Email,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    BirthDate = u.BirthDate,
+                    Status = u.Status
+                })
+                .ToListAsync();
+
+            var response = new ApiResponse<List<UserDto>>
+                {
+                    Status = "OK",
+                    Data = users,
+                    Message = "Usuarios consultados con éxito",
+                    Error = null
+                };
+
+        return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            var errorResponse = new ApiResponse<List<UserDto>>
+                {
+                    Status = "FAIL",
+                    Data = new List<UserDto>(),
+                    Message = "Error al consultar los usuarios",
+                    Error = ex.Message
+                };
+            
+            return BadRequest(errorResponse);
+        }
     }
 }

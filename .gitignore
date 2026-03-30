@@ -11,9 +11,6 @@ obj/
 .vscode/
 .vs/
 
-# Configuración sensible
-appsettings.Development.json
-
 # Archivos HTTP (opcional)
 *.http
 
@@ -25,5 +22,6 @@ appsettings.Development.json
 Thumbs.db
 
 # Configuración sensible
+appsettings.Development.json
 appsettings.json
 Migrations/
