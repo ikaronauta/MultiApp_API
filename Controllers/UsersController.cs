@@ -73,7 +73,6 @@ public class UsersController : ControllerBase
     {
         try
         {
-            // Buscar usuario por Id
             var user = await _context.Users
                 .Where(u => u.Id == id)
                 .Select(u => new UserDto
@@ -127,7 +126,6 @@ public class UsersController : ControllerBase
     {
         try
         {
-            // 🔴 Validar si el email ya existe
             var exists = await _context.Users
                 .AnyAsync(u => u.Email == dto.Email);
 
@@ -144,7 +142,6 @@ public class UsersController : ControllerBase
                 return BadRequest(errorResponse);
             }
 
-            // 🔴 Validar si el rol existe
             var roleExists = await _context.Roles
                 .AnyAsync(r => r.Id == dto.RoleId);
 
@@ -161,10 +158,8 @@ public class UsersController : ControllerBase
                 return BadRequest(errorResponse);
             }
 
-            // 🔐 Hashear contraseña
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            // 🧱 Crear entidad
             var user = new User
             {
                 DocumentType = dto.DocumentType,
@@ -178,7 +173,6 @@ public class UsersController : ControllerBase
                 Status = UserStatus.Activo
             };
 
-            // 💾 Guardar
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -215,4 +209,149 @@ public class UsersController : ControllerBase
             return BadRequest(errorResponse);
         }
     }
+
+    // Editar Usuario
+    [Authorize]
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<ApiResponse<List<UserDto>>>> UpdateUser(int id, UpdateUserDto dto)
+    {
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound(new ApiResponse<List<UserDto>>
+                {
+                    Status = "FAIL",
+                    Data = new List<UserDto>(),
+                    Message = $"No se encontró usuario con ID {id}",
+                    Error = null
+                });
+            }
+
+            if (user.Email != dto.Email)
+            {
+                var emailExists = await _context.Users.AnyAsync(u => u.Email == dto.Email && u.Id != id);
+                if (emailExists)
+                {
+                    return BadRequest(new ApiResponse<List<UserDto>>
+                    {
+                        Status = "FAIL",
+                        Data = new List<UserDto>(),
+                        Message = "El email ya está registrado por otro usuario",
+                        Error = null
+                    });
+                }
+            }
+
+            var roleExists = await _context.Roles.AnyAsync(r => r.Id == dto.RoleId);
+            if (!roleExists)
+            {
+                return BadRequest(new ApiResponse<List<UserDto>>
+                {
+                    Status = "FAIL",
+                    Data = new List<UserDto>(),
+                    Message = "El rol no existe",
+                    Error = null
+                });
+            }
+
+            user.DocumentType = dto.DocumentType;
+            user.DocumentNumber = dto.DocumentNumber;
+            user.Email = dto.Email;
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.BirthDate = dto.BirthDate;
+            user.RoleId = dto.RoleId;
+
+            await _context.SaveChangesAsync();
+
+            var updatedUserDto = new UserDto
+            {
+                Id = user.Id,
+                DocumentType = user.DocumentType,
+                DocumentNumber = user.DocumentNumber,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                BirthDate = user.BirthDate,
+                Status = user.Status
+            };
+
+            return Ok(new ApiResponse<List<UserDto>>
+            {
+                Status = "OK",
+                Data = new List<UserDto> { updatedUserDto },
+                Message = "Usuario actualizado con éxito",
+                Error = null
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ApiResponse<List<UserDto>>
+            {
+                Status = "FAIL",
+                Data = new List<UserDto>(),
+                Message = "Error al actualizar el usuario",
+                Error = ex.Message
+            });
+        }
+    }
+
+    // Eliminar Usuario
+    [Authorize]
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<ApiResponse<List<UserDto>>>> DeleteUser(int id)
+    {
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound(new ApiResponse<List<UserDto>>
+                {
+                    Status = "FAIL",
+                    Data = new List<UserDto>(),
+                    Message = $"No se encontró usuario con ID {id}",
+                    Error = null
+                });
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            var deletedUserDto = new UserDto
+            {
+                Id = user.Id,
+                DocumentType = user.DocumentType,
+                DocumentNumber = user.DocumentNumber,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                BirthDate = user.BirthDate,
+                Status = user.Status
+            };
+
+            return Ok(new ApiResponse<List<UserDto>>
+            {
+                Status = "OK",
+                Data = new List<UserDto> { deletedUserDto },
+                Message = "Usuario eliminado con éxito",
+                Error = null
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ApiResponse<List<UserDto>>
+            {
+                Status = "FAIL",
+                Data = new List<UserDto>(),
+                Message = "Error al eliminar el usuario",
+                Error = ex.Message
+            });
+        }
+    }
+    
 }
