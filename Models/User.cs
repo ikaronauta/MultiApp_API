@@ -39,4 +39,22 @@ public class User
     public int RoleId { get; set; }
 
     public Role Role { get; set; } = null!;
+
+    public int? CreatedById { get; set; }
+
+    public User? CreatedBy { get; set; }
+
+    public ICollection<User> CreatedUsers { get; set; } = new List<User>();
+
+    public int? EditedById { get; set; }
+
+    public User? EditedBy { get; set; }
+
+    public ICollection<User> EditedUsers { get; set; } = new List<User>();
+
+    [Required]
+    public DateTime CreatedDate { get; set; }
+
+    public DateTime? EditedDate { get; set; }
+
 }

@@ -38,7 +38,12 @@ public class UsersController : ControllerBase
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     BirthDate = u.BirthDate,
-                    Status = u.Status
+                    Status = u.Status,
+                    RoleId = u.RoleId,
+                    CreatedById = u.CreatedById,
+                    EditedById = u.EditedById,
+                    CreatedDate = u.CreatedDate,
+                    EditedDate = u.EditedDate
                 })
                 .ToListAsync();
 
@@ -84,7 +89,12 @@ public class UsersController : ControllerBase
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     BirthDate = u.BirthDate,
-                    Status = u.Status
+                    Status = u.Status,
+                    RoleId = u.RoleId,
+                    CreatedById = u.CreatedById,
+                    EditedById = u.EditedById,
+                    CreatedDate = u.CreatedDate,
+                    EditedDate = u.EditedDate
                 })
                 .FirstOrDefaultAsync();
 
@@ -169,8 +179,9 @@ public class UsersController : ControllerBase
                 LastName = dto.LastName,
                 BirthDate = dto.BirthDate,
                 PasswordHash = passwordHash,
+                Status = UserStatus.Activo,
                 RoleId = dto.RoleId,
-                Status = UserStatus.Activo
+                CreatedById = dto.CreatedById
             };
 
             _context.Users.Add(user);
@@ -185,7 +196,12 @@ public class UsersController : ControllerBase
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDate = user.BirthDate,
-                Status = user.Status
+                Status = user.Status,
+                RoleId = user.RoleId,
+                CreatedById = user.CreatedById,
+                EditedById = user.EditedById,
+                CreatedDate = user.CreatedDate,
+                EditedDate = user.EditedDate
             };
 
             return Ok(new ApiResponse<UserDto>
@@ -264,6 +280,7 @@ public class UsersController : ControllerBase
             user.LastName = dto.LastName;
             user.BirthDate = dto.BirthDate;
             user.RoleId = dto.RoleId;
+            user.EditedById = dto.EditedById;
 
             await _context.SaveChangesAsync();
 
@@ -276,7 +293,12 @@ public class UsersController : ControllerBase
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDate = user.BirthDate,
-                Status = user.Status
+                Status = user.Status,
+                RoleId = user.RoleId,
+                CreatedById = user.CreatedById,
+                EditedById = user.EditedById,
+                CreatedDate = user.CreatedDate,
+                EditedDate = user.EditedDate
             };
 
             return Ok(new ApiResponse<List<UserDto>>
@@ -331,7 +353,12 @@ public class UsersController : ControllerBase
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDate = user.BirthDate,
-                Status = user.Status
+                Status = user.Status,
+                RoleId = user.RoleId,
+                CreatedById = user.CreatedById,
+                EditedById = user.EditedById,
+                CreatedDate = user.CreatedDate,
+                EditedDate = user.EditedDate
             };
 
             return Ok(new ApiResponse<List<UserDto>>

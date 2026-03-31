@@ -22,4 +22,6 @@ public class CreateUserDto
     public string Password { get; set; } = string.Empty;
 
     public int RoleId { get; set; }
+
+    public int CreatedById { get; set; }
 }

@@ -21,29 +21,26 @@ dotnet ef migrations remove
                 columns: new[] { "Id", "Name", "Description" },
                 values: new object[,]
                 {
-                    { 1, "Admin", "Administrador del sistema" },
-                    { 2, "User", "Usuario estándar" },
-                    { 3, "Manager", "Gestor o supervisor" }
+                    { 1, "Super Admin", "Administrador global" },
+                    { 2, "Admin", "Administrador del sistema" },
+                    { 3, "User", "Usuario estándar" }
                 }
             );
 
             // Insertar datos iniciales
-           migrationBuilder.InsertData(
+            migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId" },
-                values: new object[] { "CC", "16076940", "julian.ortiz@example.com", "Julian", "Ortiz", new DateOnly(1983, 9, 20), "$2a$11$eQLwzLKtTg8CszqI5JLRHeAiLdNPGTWINMlmLH/Viz.OoYSanS9bW", "Activo", 1 }
+                columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId", "CreatedById", "EditedById", "CreatedDate", "EditedDate" },
+                values: new object[] {"CC", "0", "admin.sys@example.com", "Administrador", "Sistema", new DateOnly(1983, 9, 20), "$2a$11$qmUI0mJdW1NuWTNZKKqReOrUlsiYK5gzXuazfRP1sexnzvDVA3y2u", "Activo", 1, null, null, DateTime.Now, null}
             );
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId" },
-                values: new object[] { "CC", "30287241", "maria.perez@example.com", "Maria", "Perez", new DateOnly(1992, 8, 15), "$2a$11$qmUI0mJdW1NuWTNZKKqReOrUlsiYK5gzXuazfRP1sexnzvDVA3y2u", "Activo", 2 }
-            );
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId" },
-                values: new object[] { "CC", "32156505", "luis.gomez@example.com", "Luis", "Gomez", new DateOnly(1985, 12, 1), "$2a$11$8tlbxo0bfDXAdz.iMtF0iO7ivsCTLpFzlB0xp1kDkqonhVyHWSyly", "Activo", 2 }
+                columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId", "CreatedById", "EditedById", "CreatedDate", "EditedDate" },
+                values: new object[,] { 
+                    { "CC", "16076940", "julian.ortiz@example.com", "Julian", "Ortiz", new DateOnly(1983, 9, 20), "$2a$11$eQLwzLKtTg8CszqI5JLRHeAiLdNPGTWINMlmLH/Viz.OoYSanS9bW", "Activo", 2, 1, null, DateTime.Now, null},
+                    {"CC", "32156505", "luis.gomez@example.com", "Luis", "Gomez", new DateOnly(1985, 12, 1), "$2a$11$8tlbxo0bfDXAdz.iMtF0iO7ivsCTLpFzlB0xp1kDkqonhVyHWSyly", "Activo", 3, 1, null, DateTime.Now, null}
+                }
             );
 
 using Microsoft.AspNetCore.Identity;
@@ -71,3 +68,4 @@ dotnet add package BCrypt.Net-Next
 using BCrypt.Net;
 
 Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("abc123"));
+

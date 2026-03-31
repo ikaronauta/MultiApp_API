@@ -30,21 +30,55 @@ namespace MultiApp_API.Data
                       .HasConversion<string>();
 
                 // Restricción de valores permitidos
-                entity.ToTable(t => t.HasCheckConstraint(
-                    "CK_Users_DocumentType",
-                    "[DocumentType] IN ('CC', 'NIT', 'Passport')"
-                ));
+                entity.ToTable("Users", t =>
+                    {
+                        t.HasCheckConstraint(
+                            "CK_Users_DocumentType",
+                            "[DocumentType] IN ('CC', 'NIT', 'Passport')"
+                        );
 
-                entity.ToTable(t => t.HasCheckConstraint(
-                    "CK_Users_Status",
-                    "[Status] IN ('Activo', 'Inactivo', 'Bloqueado')"
-                ));
+                        t.HasCheckConstraint(
+                            "CK_Users_Status",
+                            "[Status] IN ('Activo', 'Inactivo', 'Bloqueado')"
+                        );
+                    });
 
                 entity.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
+                    .WithMany(r => r.Users)
+                    .HasForeignKey(u => u.RoleId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(u => u.CreatedBy)
+                    .WithMany(u => u.CreatedUsers)
+                    .HasForeignKey(u => u.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(u => u.EditedBy)
+                    .WithMany(u => u.EditedUsers)
+                    .HasForeignKey(u => u.EditedById)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries<User>();
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedDate = DateTime.UtcNow;
+                    entry.Entity.EditedDate = DateTime.UtcNow;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.EditedDate = DateTime.UtcNow;
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

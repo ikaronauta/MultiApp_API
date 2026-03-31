@@ -22,4 +22,6 @@ public class UpdateUserDto
     public string Password { get; set; } = string.Empty;
 
     public int RoleId { get; set; }
+
+    public int EditedById { get; set; }
 }

@@ -19,4 +19,14 @@ public class UserDto
         public required  DateOnly BirthDate { get; set; }
 
         public UserStatus Status { get; set; } = UserStatus.Activo;
+
+        public int RoleId { get; set; }
+
+        public int? CreatedById { get; set; }
+
+        public int? EditedById { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime? EditedDate { get; set; }
     }
