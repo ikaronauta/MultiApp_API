@@ -6,20 +6,32 @@ public class User
 {
     public int Id { get; set; }
 
-    public required DocumentType DocumentType { get; set; }
+    [Required]
+    public DocumentType DocumentType { get; set; }
 
-    public required string DocumentNumber { get; set; }
+    [Required]
+    [MaxLength(50)]
+    public string DocumentNumber { get; set; } = string.Empty;
 
-    public required string Email { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = string.Empty;
 
-    public required string FirstName { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string FirstName { get; set; } = string.Empty;
 
-    public required string LastName { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string LastName { get; set; } = string.Empty;
 
-    public required DateOnly BirthDate { get; set; }
+    [Required]
+    public DateOnly BirthDate { get; set; }
 
-    public required string PasswordHash { get; set; }
+    [Required]
+    public string PasswordHash { get; set; } = string.Empty;
 
+    [Required]
     public UserStatus Status { get; set; } = UserStatus.Activo;
 
     public int RoleId { get; set; }
