@@ -1,10 +1,10 @@
-// Models/DTOs/CreateUserDto.cs
+// Models/DTOs/Users/EditUserDto.cs
 
 using System.Text.Json.Serialization;
 
-namespace MultiApp_API.Models.DTOs;
+namespace MultiApp_API.Models.DTOs.Users;
 
-public class CreateUserDto
+public class EditUserDto
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public DocumentType DocumentType { get; set; }

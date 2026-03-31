@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiApp_API.Data;
 using MultiApp_API.Models;
-using MultiApp_API.Models.DTOs;
+using MultiApp_API.Models.DTOs.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
@@ -21,6 +21,7 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
+    // Consultar Usuarios
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<ApiResponse<List<UserDto>>>> GetUsers()
@@ -65,6 +66,61 @@ public class UsersController : ControllerBase
         }
     }
 
+    // Consultar usuario por ID
+    [Authorize]
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<ApiResponse<List<UserDto>>>> GetUserById(int id)
+    {
+        try
+        {
+            // Buscar usuario por Id
+            var user = await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    DocumentType = u.DocumentType,
+                    DocumentNumber = u.DocumentNumber,
+                    Email = u.Email,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    BirthDate = u.BirthDate,
+                    Status = u.Status
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound(new ApiResponse<List<UserDto>>
+                {
+                    Status = "FAIL",
+                    Data = new List<UserDto>(),
+                    Message = $"No se encontró usuario con ID {id}",
+                    Error = null
+                });
+            }
+
+            return Ok(new ApiResponse<List<UserDto>>
+            {
+                Status = "OK",
+                Data = new List<UserDto> { user },
+                Message = "Usuario consultado con éxito",
+                Error = null
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ApiResponse<List<UserDto>>
+            {
+                Status = "FAIL",
+                Data = new List<UserDto>(),
+                Message = "Error al consultar el usuario",
+                Error = ex.Message
+            });
+        }
+    }
+
+    // Crear Usuario
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateUser(CreateUserDto dto)

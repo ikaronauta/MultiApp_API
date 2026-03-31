@@ -1,6 +1,6 @@
-// Models/DTOs/UserDto.cs
+// Models/DTOs/Users/UserDto.cs
 
-namespace MultiApp_API.Models.DTOs;
+namespace MultiApp_API.Models.DTOs.Users;
 
 public class UserDto
     {
