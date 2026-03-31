@@ -8,10 +8,12 @@ public class Role
 {
     public int Id { get; set; }
 
-    public required string Name { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string Name { get; set; } = string.Empty;
 
     [MaxLength(255)]
-    public required string Description { get; set; } = string.Empty;
+    public string? Description { get; set; }
 
-    public ICollection<User>? Users { get; set; }
+    public ICollection<User> Users { get; set; } = new List<User>()
 }
