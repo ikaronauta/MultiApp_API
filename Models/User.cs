@@ -1,5 +1,7 @@
 // Models/User.cs
 
+using System.ComponentModel.DataAnnotations;
+
 namespace MultiApp_API.Models;
 
 public class User 

@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BCrypt.Net;
 
 namespace MultiApp_API.Controllers;
 
@@ -55,10 +56,10 @@ public class AuthController : ControllerBase
             }
                 
             // Verificar contraseña
-            var hasher = new PasswordHasher<User>();
-            var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+            bool isValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
 
-            if (result == PasswordVerificationResult.Failed) {
+            if (!isValid)
+            {
                 response.Message = "Usuario o contraseña incorrectos";
                 return Unauthorized(response);
             }

@@ -8,3 +8,5 @@ echo 'export PATH="$PATH:$HOME/.dotnet/tools"' >> ~/.bashrc
 echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
 echo 'export PATH=$PATH:$HOME/.dotnet/tools:$HOME/.dotnet' >> ~/.bashrc
 source ~/.bashrc
+
+dotnet add package BCrypt.Net-Next

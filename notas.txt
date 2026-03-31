@@ -31,19 +31,19 @@ dotnet ef migrations remove
            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId" },
-                values: new object[] { "CC", "16076940", "julian.ortiz@example.com", "Julian", "Ortiz", new DateOnly(1983, 9, 20), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==", "Activo", 1 }
+                values: new object[] { "CC", "16076940", "julian.ortiz@example.com", "Julian", "Ortiz", new DateOnly(1983, 9, 20), "$2a$11$eQLwzLKtTg8CszqI5JLRHeAiLdNPGTWINMlmLH/Viz.OoYSanS9bW", "Activo", 1 }
             );
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId" },
-                values: new object[] { "CC", "30287241", "maria.perez@example.com", "Maria", "Perez", new DateOnly(1992, 8, 15), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==", "Activo", 2 }
+                values: new object[] { "CC", "30287241", "maria.perez@example.com", "Maria", "Perez", new DateOnly(1992, 8, 15), "$2a$11$qmUI0mJdW1NuWTNZKKqReOrUlsiYK5gzXuazfRP1sexnzvDVA3y2u", "Activo", 2 }
             );
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId" },
-                values: new object[] { "CC", "32156505", "luis.gomez@example.com", "Luis", "Gomez", new DateOnly(1985, 12, 1), "AQAAAAIAAYagAAAAEC5viSCTMhspWjqVoEAKKnYSWF2+nZCrhF1t+7yUc6HK+H5q/yenzrmG0Qtyq0pfgA==", "Activo", 2 }
+                values: new object[] { "CC", "32156505", "luis.gomez@example.com", "Luis", "Gomez", new DateOnly(1985, 12, 1), "$2a$11$8tlbxo0bfDXAdz.iMtF0iO7ivsCTLpFzlB0xp1kDkqonhVyHWSyly", "Activo", 2 }
             );
 
 using Microsoft.AspNetCore.Identity;
@@ -65,3 +65,9 @@ dotnet watch run
 git rm --cached appsettings.json
 
 El --cached es importante: elimina del repo, pero no del disco local.
+
+dotnet add package BCrypt.Net-Next
+
+using BCrypt.Net;
+
+Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("abc123"));
