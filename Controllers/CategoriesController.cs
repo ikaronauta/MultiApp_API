@@ -57,7 +57,7 @@ public class CategoriesController : ControllerBase
                 {
                     Status = "FAIL",
                     Data = new List<CategoryDto>(),
-                    Message = "Error al consultar los usuarios",
+                    Message = "Error al consultar las categorías",
                     Error = ex.Message
                 };
             

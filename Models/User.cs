@@ -70,4 +70,9 @@ public class User
     [InverseProperty("EditedBy")]
     public ICollection<Category> EditedCategories { get; set; } = new List<Category>();
 
+    [InverseProperty("CreatedBy")]
+    public ICollection<Product> CreatedProducts { get; set; } = new List<Product>();
+
+    [InverseProperty("EditedBy")]
+    public ICollection<Product> EditedProducts { get; set; } = new List<Product>();
 }

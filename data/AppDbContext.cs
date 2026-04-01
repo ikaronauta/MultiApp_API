@@ -15,6 +15,7 @@ namespace MultiApp_API.Data
         public DbSet<User> Users { get; set; } // plural para DbSet
         public DbSet<Role> Roles { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,21 +66,42 @@ namespace MultiApp_API.Data
                 entity.ToTable("Categories");
 
                 entity.HasOne(c => c.CreatedBy)
-                    .WithMany(u => u.CreatedCategories) // <-- colección en User
+                    .WithMany(u => u.CreatedCategories)
                     .HasForeignKey(c => c.CreatedById)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(c => c.EditedBy)
-                    .WithMany(u => u.EditedCategories) // <-- colección en User
+                    .WithMany(u => u.EditedCategories)
                     .HasForeignKey(c => c.EditedById)
                     .OnDelete(DeleteBehavior.Restrict);
-                });
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.ToTable("Products");
+
+                entity.HasOne(p => p.CreatedBy)
+                    .WithMany(u => u.CreatedProducts)
+                    .HasForeignKey(p => p.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(p => p.EditedBy)
+                    .WithMany(u => u.EditedProducts)
+                    .HasForeignKey(p => p.EditedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(p => p.Stock).HasDefaultValue(0);
+
+                entity.Property(p => p.MinStock).HasDefaultValue(5);
+
+                entity.Property(p => p.IsActive).HasDefaultValue(true);
+            });
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
              var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is User || e.Entity is Category);
+                .Where(e => e.Entity is User || e.Entity is Category || e.Entity is Product);
 
             foreach (var entry in entries)
             {
@@ -95,6 +117,15 @@ namespace MultiApp_API.Data
                         category.CreatedDate = DateTime.UtcNow;
                         category.EditedDate = DateTime.UtcNow;
                     }
+                    else if (entry.Entity is Product product)
+                    {
+                        product.CreatedDate = DateTime.UtcNow;
+                        product.EditedDate = DateTime.UtcNow;
+                        product.Stock = 0;
+                        product.MinStock = 5;
+                        product.IsActive = true;
+                    }
+                    
                 }
 
                 if (entry.State == EntityState.Modified)
@@ -106,6 +137,10 @@ namespace MultiApp_API.Data
                     else if (entry.Entity is Category category)
                     {
                         category.EditedDate = DateTime.UtcNow;
+                    }
+                    else if (entry.Entity is Product product)
+                    {
+                        product.EditedDate = DateTime.UtcNow;
                     }
                 }
             }

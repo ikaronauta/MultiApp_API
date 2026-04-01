@@ -15,19 +15,21 @@ dotnet ef database update
 BORRAR migración actual
 dotnet ef migrations remove
 
-// Insertar roles iniciales
+dotnet ef database drop
+
+ // Insertar roles iniciales
             migrationBuilder.InsertData(
                 table: "Roles",
-                columns: new[] { "Id", "Name", "Description" },
+                columns: new[] { "Name", "Description" },
                 values: new object[,]
                 {
-                    { 1, "Super Admin", "Administrador global" },
-                    { 2, "Admin", "Administrador del sistema" },
-                    { 3, "User", "Usuario estándar" }
+                    { "Super Admin", "Administrador global" },
+                    { "Admin", "Administrador del sistema" },
+                    { "User", "Usuario estándar" }
                 }
             );
 
-            // Insertar datos iniciales
+            // Insertar usuarios iniciales
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "DocumentType", "DocumentNumber", "Email", "FirstName", "LastName", "BirthDate", "PasswordHash", "Status", "RoleId", "CreatedById", "EditedById", "CreatedDate", "EditedDate" },
@@ -43,15 +45,20 @@ dotnet ef migrations remove
                 }
             );
 
-using Microsoft.AspNetCore.Identity;
+            // Insertar categoría de prueba
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Name", "Description", "CreatedById", "CreatedDate" },
+                values: new object[] { "Prueba", "Categoría de prueba", 2, DateTime.Now }
+            );
 
-// Crear el hasher usando object
-var hasher = new PasswordHasher<object>();
+            // Insertar producto de prueba
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "SKU", "Name", "Description", "CreatedById", "CreatedDate" },
+                values: new object[] { "PR1", "ProdPrueba", "Producto de prueba", 2, DateTime.Now }
+            );
 
-// Hashear la contraseña directamente
-string hash = hasher.HashPassword(null, "abc123");
-
-Console.WriteLine(hash);
 
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 dotnet add package System.IdentityModel.Tokens.Jwt

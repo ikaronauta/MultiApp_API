@@ -1,4 +1,4 @@
-// Controllers/UsersController.cs
+// Controllers/BaseController.cs
 
 using Microsoft.AspNetCore.Mvc;
 using MultiApp_API.Data;
