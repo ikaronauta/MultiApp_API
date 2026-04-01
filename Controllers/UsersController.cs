@@ -204,10 +204,10 @@ public class UsersController : ControllerBase
                 EditedDate = user.EditedDate
             };
 
-            return Ok(new ApiResponse<UserDto>
+            return Ok(new ApiResponse<List<UserDto>>
             {
                 Status = "OK",
-                Data = userDto,
+                Data = new List<UserDto> { userDto },
                 Message = "Usuario creado con éxito",
                 Error = null
             });

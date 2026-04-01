@@ -14,6 +14,7 @@ namespace MultiApp_API.Data
 
         public DbSet<User> Users { get; set; } // plural para DbSet
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,23 +59,54 @@ namespace MultiApp_API.Data
                     .HasForeignKey(u => u.EditedById)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.ToTable("Categories");
+
+                entity.HasOne(c => c.CreatedBy)
+                    .WithMany(u => u.CreatedCategories) // <-- colección en User
+                    .HasForeignKey(c => c.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(c => c.EditedBy)
+                    .WithMany(u => u.EditedCategories) // <-- colección en User
+                    .HasForeignKey(c => c.EditedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+                });
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entries = ChangeTracker.Entries<User>();
+             var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is User || e.Entity is Category);
 
             foreach (var entry in entries)
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedDate = DateTime.UtcNow;
-                    entry.Entity.EditedDate = DateTime.UtcNow;
+                    if (entry.Entity is User user)
+                    {
+                        user.CreatedDate = DateTime.UtcNow;
+                        user.EditedDate = DateTime.UtcNow;
+                    }
+                    else if (entry.Entity is Category category)
+                    {
+                        category.CreatedDate = DateTime.UtcNow;
+                        category.EditedDate = DateTime.UtcNow;
+                    }
                 }
 
                 if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.EditedDate = DateTime.UtcNow;
+                    if (entry.Entity is User user)
+                    {
+                        user.EditedDate = DateTime.UtcNow;
+                    }
+                    else if (entry.Entity is Category category)
+                    {
+                        category.EditedDate = DateTime.UtcNow;
+                    }
                 }
             }
 
