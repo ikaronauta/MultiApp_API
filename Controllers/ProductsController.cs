@@ -39,6 +39,7 @@ public class ProductsController : ControllerBase
                     MinStock = p.MinStock,
                     CreatedById = p.CreatedById,
                     IsActive = p.IsActive,
+                    CategoryId = p.CategoryId,
                     EditedById = p.EditedById,
                     CreatedDate = p.CreatedDate,
                     EditedDate = p.EditedDate
@@ -88,6 +89,7 @@ public class ProductsController : ControllerBase
                     MinStock = p.MinStock,
                     CreatedById = p.CreatedById,
                     IsActive = p.IsActive,
+                    CategoryId = p.CategoryId,
                     EditedById = p.EditedById,
                     CreatedDate = p.CreatedDate,
                     EditedDate = p.EditedDate
@@ -172,6 +174,7 @@ public class ProductsController : ControllerBase
                 Stock = product.Stock,
                 MinStock = product.MinStock,
                 IsActive = product.IsActive,
+                CategoryId = product.CategoryId,
                 CreatedById = product.CreatedById,
                 EditedById = product.EditedById,
                 CreatedDate = product.CreatedDate,
@@ -199,5 +202,89 @@ public class ProductsController : ControllerBase
             return BadRequest(errorResponse);
         }
     }
+
+    // Editar Producto
+    // [Authorize]
+    // [HttpPut("{id:int}")]
+    // public async Task<ActionResult<ApiResponse<List<ProductDto>>>> UpdateCategory(int id, UpdateProductDto dto)
+    // {
+    //     try
+    //     {
+    //         var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+    //         if (product == null)
+    //         {
+    //             return NotFound(new ApiResponse<List<ProductDto>>
+    //             {
+    //                 Status = "FAIL",
+    //                 Data = new List<ProductDto>(),
+    //                 Message = $"No se encontró producto con ID {id}",
+    //                 Error = null
+    //             });
+    //         }
+
+    //         if (product.Name != dto.Name && product.CategoryId == dto.CategoryId)
+    //         {
+    //             var productExists = await _context.Products.AnyAsync(p => p.Name == dto.Name && 
+    //                 p.CategoryId == dto.CategoryId && p.Id != id);
+
+    //             if (productExists)
+    //             {
+    //                 return BadRequest(new ApiResponse<List<ProductDto>>
+    //                 {
+    //                     Status = "FAIL",
+    //                     Data = new List<ProductDto>(),
+    //                     Message = "El Producto ya está registrado por en esta categoría",
+    //                     Error = null
+    //                 });
+    //             }
+    //         }
+
+    //         product.SKU = dto.SKU;
+    //         product.Name = dto.Name;
+    //         product.Description = dto.Description;
+    //         product.Stock = dto.Stock;
+    //         product.MinStock = dto.MinStock;
+    //         product.IsActive = dto.IsActive;
+    //         product.CategoryId = dto.CategoryId;
+    //         product.EditedById = dto.EditedById;
+
+    //         await _context.SaveChangesAsync();
+
+    //         var updatedProductDto = new ProductDto
+    //         {
+    //             Id = product.Id,
+    //             SKU = product.SKU,
+    //             Name = product.Name,
+    //             Description = product.Description,
+    //             Stock = product.Stock,
+    //             MinStock = product.MinStock,
+    //             IsActive = product.IsActive,
+    //             CategoryId = product.CategoryId,
+    //             CreatedById = product.CreatedById,
+    //             EditedById = product.EditedById,
+    //             CreatedDate = product.CreatedDate,
+    //             EditedDate = product.EditedDate
+    //         };
+
+    //         return Ok(new ApiResponse<List<ProductDto>>
+    //         {
+    //             Status = "OK",
+    //             Data = new List<ProductDto> { updatedProductDto },
+    //             Message = "Producto actualizado con éxito",
+    //             Error = null
+    //         });
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest(new ApiResponse<List<ProductDto>>
+    //         {
+    //             Status = "FAIL",
+    //             Data = new List<ProductDto>(),
+    //             Message = "Error al actualizar el producto",
+    //             Error = ex.Message
+    //         });
+    //     }
+    // }
 
 }

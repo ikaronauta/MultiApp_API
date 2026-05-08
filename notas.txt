@@ -55,8 +55,8 @@ dotnet ef database drop
             // Insertar producto de prueba
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "SKU", "Name", "Description", "CreatedById", "CreatedDate" },
-                values: new object[] { "PR1", "ProdPrueba", "Producto de prueba", 2, DateTime.Now }
+                columns: new[] { "SKU", "Name", "Description", "CategoryId", "CreatedById", "CreatedDate" },
+                values: new object[] { "PR1", "ProdPrueba", "Producto de prueba", 1, 2, DateTime.Now }
             );
 
 
