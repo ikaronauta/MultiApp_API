@@ -53,6 +53,9 @@ public class User
     [ForeignKey("EditedById")]
     public User? EditedBy { get; set; }
 
+    public string? ResetPasswordToken { get; set; }
+    public DateTime? ResetPasswordExpires { get; set; }
+
     [Required]
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
